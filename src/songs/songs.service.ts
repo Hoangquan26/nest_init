@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateSongDto } from './dto/create-song.dto';
 import { title } from 'process';
-import { Connection } from './songs.constant';
+import { Connection } from '../common/constants/songs.constant';
 
 
 type Song =  {
@@ -14,8 +14,8 @@ type Song =  {
 
 @Injectable()
 export class SongsService {
-    constructor(@Inject('CONNECTION')connection: Connection ) {
-        console.log(connection)
+    constructor() {
+      
     }
     private readonly songs: Song[] = [ 
         {
