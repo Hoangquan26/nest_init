@@ -3,7 +3,6 @@ import { User } from 'src/users/user.entity';
 import {
     Column,
     Entity,
-    ManyToMany,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn
@@ -17,8 +16,7 @@ export class Playlist {
     @Column()
     name: string;
 
-    @OneToMany(() => Song, song => song.playlist)
-    songs: Song[];
+
 
     @ManyToOne(() => User, user => user.playlists)
     user: User

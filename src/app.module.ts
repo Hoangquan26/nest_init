@@ -14,25 +14,26 @@ import { UsersModule } from './users/users.module';
 import { DataSource } from 'typeorm';
 
 @Module({
-  imports: [SongsModule, LoggerModule,
+  imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: 'localhost',
-      username: 'root',
-      password: '',
-      port: 3306,
-      entities: [User, Song, Playlist],
-      synchronize: true
+      port: 5432,
+      username: 'postgres',
+      password: '1',
+      database: 'spotify-clone',
+      entities: [Song],
+      synchronize: true,
     }),
-
+    SongsModule, 
+    LoggerModule,
     PlaylistsModule,
-
     UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
-
 })
+
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
     consumer

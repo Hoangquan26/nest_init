@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { SongsController } from './songs.controller';
 import { SongsService } from './songs.service';
 import { connection } from '../common/constants/songs.constant'
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Song } from './song.entity';
 @Module({
   controllers: [SongsController],
   providers: [
@@ -10,6 +12,7 @@ import { connection } from '../common/constants/songs.constant'
       provide: "CONNECTION",
       useValue: connection
     }
-  ]
+  ],
+  imports: [TypeOrmModule.forFeature([Song])]
 })
 export class SongsModule {}

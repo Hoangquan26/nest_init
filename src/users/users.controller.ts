@@ -4,19 +4,19 @@ import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('users')
 export class UsersController {
-    constructor(private usersService = new UsersService()) {}
+    constructor() {}
 
-    createUser() {
-        return this.usersService.createUser();
-    }
+    // createUser() {
+    //     return this.usersService.createUser();
+    // }
 
-    login(@Body() loginUserDto: LoginUserDto) {
-        return this.usersService.login(loginUserDto);
-    }
+    // login(@Body() loginUserDto: LoginUserDto) {
+    //     return this.usersService.login(loginUserDto);
+    // }
 
-    registered(@Body() registeredUserDto: LoginUserDto) {
-        return this.usersService.registered(registeredUserDto);
-    }
+    // registered(@Body() registeredUserDto: LoginUserDto) {
+    //     return this.usersService.registered(registeredUserDto);
+    // }
 
 
 }
