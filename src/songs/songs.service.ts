@@ -1,25 +1,31 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, ParseIntPipe, Query } from '@nestjs/common';
 import { CreateSongDto } from './dto/create-song.dto';
-import { title } from 'process';
-import { Connection } from '../common/constants/songs.constant';
 import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Song } from './song.entity';
 import { UpdateSongDto } from './dto/update-song.dto';
-
-
+import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { Artist } from 'src/artists/artist.entity';
 
 
 @Injectable()
 export class SongsService {
     constructor(
         @InjectRepository(Song)
-        private songRepository: Repository<Song>
+        private songRepository: Repository<Song>,
+        @InjectRepository(Artist)
+        private artistRepository: Repository<Artist>
     ) {
 
     }
 
-    create(createSongDto: CreateSongDto): Promise<Song> {
+    async paginate(options: IPaginationOptions) : Promise<Pagination<Song>> {
+        const queryBuilder = this.songRepository.createQueryBuilder('song');
+        queryBuilder.orderBy('song.releasedDate', 'DESC');
+        return paginate<Song>(queryBuilder, options);
+    }
+
+    async create(createSongDto: CreateSongDto): Promise<Song> {
         console.log(createSongDto)
         const newSong = new Song();
         newSong.title = createSongDto.title;
@@ -27,11 +33,20 @@ export class SongsService {
         newSong.releasedDate = createSongDto.releasedDate;
         newSong.duration = createSongDto.duration;
         newSong.lyrics = createSongDto.lyrics;
-        return this.songRepository.save(newSong);
+
+        const artists = await this.artistRepository.findByIds(createSongDto.artists);
+        newSong.artists = artists;
+        return await this.songRepository.save(newSong);
     }
 
-    findAll(): Promise<Song[]> {
-        return this.songRepository.find();
+    findAll(
+        page, limit
+    ): Promise<Pagination<Song>> {
+        console.log(page, limit)
+        return this.paginate({
+            page,
+            limit
+        })
     }   
 
     findOne(id: number): Promise<Song> {

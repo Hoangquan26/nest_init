@@ -5,13 +5,16 @@ import { SongsModule } from './songs/songs.module';
 import { LoggerModule } from './common/middleware/logger/logger.module';
 import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { SongsController } from './songs/songs.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/user.entity';
 import { Song } from './songs/song.entity';
-import { Playlist } from './playlists/playlist.entity';
 import { PlaylistsModule } from './playlists/playlists.module';
 import { UsersModule } from './users/users.module';
 import { DataSource } from 'typeorm';
+import { Artist } from './artists/artist.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Playlist } from './playlists/playlist.entity';
+import { User } from './users/user.entity';
+import { AuthModule } from './auth/auth.module';
+import { ArtistsModule } from './artists/artists.module';
 
 @Module({
   imports: [
@@ -22,17 +25,21 @@ import { DataSource } from 'typeorm';
       username: 'postgres',
       password: '1',
       database: 'spotify-clone',
-      entities: [Song],
+      entities: [Song, Artist, Playlist, User],
       synchronize: true,
     }),
     SongsModule, 
     LoggerModule,
     PlaylistsModule,
-    UsersModule
+    UsersModule,
+    AuthModule,
+    ArtistsModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
+
+
 
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
